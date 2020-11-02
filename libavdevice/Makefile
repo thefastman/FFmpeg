@@ -12,6 +12,8 @@ OBJS-$(HAVE_LIBC_MSVCRT)                 += file_open.o
 OBJS-$(CONFIG_SHARED)                    += reverse.o
 
 # input/output devices
+OBJS-$(CONFIG_LIBNDI_NEWTEK_OUTDEV)      += libndi_newtek_enc.o
+OBJS-$(CONFIG_LIBNDI_NEWTEK_INDEV)       += libndi_newtek_dec.o
 OBJS-$(CONFIG_ALSA_INDEV)                += alsa_dec.o alsa.o timefilter.o
 OBJS-$(CONFIG_ALSA_OUTDEV)               += alsa_enc.o alsa.o
 OBJS-$(CONFIG_ANDROID_CAMERA_INDEV)      += android_camera.o
@@ -57,16 +59,18 @@ OBJS-$(CONFIG_LIBDC1394_INDEV)           += libdc1394.o
 # Windows resource file
 SLIBOBJS-$(HAVE_GNU_WINDRES)             += avdeviceres.o
 
-SKIPHEADERS                              += decklink_common.h
-SKIPHEADERS-$(CONFIG_DECKLINK)           += decklink_enc.h decklink_dec.h \
-                                            decklink_common_c.h
-SKIPHEADERS-$(CONFIG_DSHOW_INDEV)        += dshow_capture.h
-SKIPHEADERS-$(CONFIG_FBDEV_INDEV)        += fbdev_common.h
-SKIPHEADERS-$(CONFIG_FBDEV_OUTDEV)       += fbdev_common.h
-SKIPHEADERS-$(CONFIG_LIBPULSE)           += pulse_audio_common.h
-SKIPHEADERS-$(CONFIG_V4L2_INDEV)         += v4l2-common.h
-SKIPHEADERS-$(CONFIG_V4L2_OUTDEV)        += v4l2-common.h
-SKIPHEADERS-$(CONFIG_ALSA)               += alsa.h
-SKIPHEADERS-$(CONFIG_SNDIO)              += sndio.h
+SKIPHEADERS-$(CONFIG_LIBNDI_NEWTEK_INDEV)  += libndi_newtek_common.h
+SKIPHEADERS-$(CONFIG_LIBNDI_NEWTEK_OUTDEV) += libndi_newtek_common.h
+SKIPHEADERS                                += decklink_common.h
+SKIPHEADERS-$(CONFIG_DECKLINK)             += decklink_enc.h decklink_dec.h \
+                                              decklink_common_c.h
+SKIPHEADERS-$(CONFIG_DSHOW_INDEV)          += dshow_capture.h
+SKIPHEADERS-$(CONFIG_FBDEV_INDEV)          += fbdev_common.h
+SKIPHEADERS-$(CONFIG_FBDEV_OUTDEV)         += fbdev_common.h
+SKIPHEADERS-$(CONFIG_LIBPULSE)             += pulse_audio_common.h
+SKIPHEADERS-$(CONFIG_V4L2_INDEV)           += v4l2-common.h
+SKIPHEADERS-$(CONFIG_V4L2_OUTDEV)          += v4l2-common.h
+SKIPHEADERS-$(CONFIG_ALSA)                 += alsa.h
+SKIPHEADERS-$(CONFIG_SNDIO)                += sndio.h
 
 TESTPROGS-$(CONFIG_JACK_INDEV)           += timefilter
