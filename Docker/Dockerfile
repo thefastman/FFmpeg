@@ -527,6 +527,7 @@ RUN \
         --extra-libs=-lpthread \
         --enable-libsrt \
         --enable-libaribb24 \
+	--enable-libndi_newtek \
         --extra-cflags="-I${PREFIX}/include" \
         --extra-ldflags="-L${PREFIX}/lib" && \
         make && \

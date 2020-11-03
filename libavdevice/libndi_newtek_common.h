@@ -23,7 +23,6 @@
 #define AVDEVICE_LIBNDI_NEWTEK_COMMON_H
 
 #include "ndisdk/Processing.NDI.Lib.h"
-#include "ndisdk/Processing.NDI.DynamicLoad.h"
 
 #define NDI_TIME_BASE 10000000
 #define NDI_TIME_BASE_Q (AVRational){1, NDI_TIME_BASE}
