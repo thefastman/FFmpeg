@@ -1,6 +1,6 @@
 /*
  * NewTek NDI output
- * Copyright (c) 2017 Yury Kisliak
+ * Copyright (c) 2020 Yury Kisliak
  *
  * This file is part of FFmpeg.
  *
@@ -261,9 +261,7 @@ static int ndi_write_header(AVFormatContext *avctx)
     av_log(avctx, AV_LOG_ERROR, "Not impemented yet.\n");
 #else
 
-    char ndi_path[255] = NDILIB_LIBRARY_NAME;
-
-    void *hNDILib = dlopen(ndi_path, RTLD_LOCAL | RTLD_LAZY);
+    void *hNDILib = dlopen("./libndi.so.4", RTLD_LOCAL | RTLD_LAZY);
     const NDIlib_v4 *(*NDIlib_v4_load)(void) = NULL;
 
     if (hNDILib)
@@ -291,6 +289,8 @@ static int ndi_write_header(AVFormatContext *avctx)
         av_log(avctx, AV_LOG_ERROR, "NDIlib_initialize failed.\n");
         return AVERROR_EXTERNAL;
     }
+
+    av_log(avctx, AV_LOG_INFO, "NDI runtime version: %s\n", p_NDILib->version());
 
     /* check if streams compatible */
     for (n = 0; n < avctx->nb_streams; n++)
