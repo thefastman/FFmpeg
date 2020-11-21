@@ -312,7 +312,7 @@ static int ndi_create_video_stream(AVFormatContext *avctx, NDIlib_video_frame_t 
     return 0;
 }
 
-static int ndi_create_audio_stream(AVFormatContext *avctx, NDIlib_audio_frame_t *a)
+static int ndi_create_audio_stream(AVFormatContext *avctx, NDIlib_audio_frame_v3_t *a)
 {
     AVStream *st;
     struct NDIContext *ctx = avctx->priv_data;
@@ -344,12 +344,12 @@ static int ndi_read_packet(AVFormatContext *avctx, AVPacket *pkt)
     while (!ret)
     {
         NDIlib_video_frame_v2_t v;
-        NDIlib_audio_frame_v2_t a;
+        NDIlib_audio_frame_v3_t a;
         NDIlib_metadata_frame_t m;
         NDIlib_frame_type_e t;
 
         av_log(avctx, AV_LOG_DEBUG, "NDIlib_recv_capture...\n");
-        t = p_NDILib->recv_capture(ctx->recv, &v, &a, &m, 40);
+        t = p_NDILib->recv_capture_v3(ctx->recv, &v, &a, &m, 40);
         av_log(avctx, AV_LOG_DEBUG, "NDIlib_recv_capture=%d\n", t);
 
         if (t == NDIlib_frame_type_video)
@@ -367,7 +367,7 @@ static int ndi_read_packet(AVFormatContext *avctx, AVPacket *pkt)
                 ret = ndi_create_audio_stream(avctx, &a);
             if (!ret)
                 ret = ndi_set_audio_packet(avctx, &a, pkt);
-            p_NDILib->recv_free_audio_v2(ctx->recv, &a);
+            p_NDILib->recv_free_audio_v3(ctx->recv, &a);
             break;
         }
         else if (t == NDIlib_frame_type_metadata)
