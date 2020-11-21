@@ -25,12 +25,15 @@
 #include "libavutil/imgutils.h"
 
 #include "libndi_newtek_common.h"
-
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <stdio.h>
+#endif
 
 static NDIlib_v4 *p_NDILib = NULL;
 
@@ -158,7 +161,25 @@ static int ndi_read_header(AVFormatContext *avctx)
     struct NDIContext *ctx = avctx->priv_data;
 
 #ifdef _WIN32
-    av_log(avctx, AV_LOG_ERROR, "Not impemented yet.\n");
+
+    HMODULE hNDILib = LoadLibraryA("Processing.NDI.Lib.x64.dll");
+    const NDIlib_v4 *(*NDIlib_v4_load)(void) = NULL;
+
+    if (hNDILib)
+    {
+        *((FARPROC *)&NDIlib_v4_load) = GetProcAddress(hNDILib, "NDIlib_v4_load");
+    }
+
+    if (!NDIlib_v4_load)
+    {
+        if (hNDILib)
+        {
+            FreeLibrary(hNDILib);
+        }
+        av_log(avctx, AV_LOG_ERROR, "Please re-install the NewTek NDI Runtime to use this application.\n");
+        return 0;
+    }
+
 #else
 
     void *hNDILib = dlopen("./libndi.so.4", RTLD_LOCAL | RTLD_LAZY);

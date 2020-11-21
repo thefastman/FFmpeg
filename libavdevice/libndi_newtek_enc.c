@@ -258,7 +258,25 @@ static int ndi_write_header(AVFormatContext *avctx)
                                                 .clock_audio = ctx->clock_audio};
 
 #ifdef _WIN32
-    av_log(avctx, AV_LOG_ERROR, "Not impemented yet.\n");
+
+    HMODULE hNDILib = LoadLibraryA("Processing.NDI.Lib.x64.dll");
+    const NDIlib_v4 *(*NDIlib_v4_load)(void) = NULL;
+
+    if (hNDILib)
+    {
+        *((FARPROC *)&NDIlib_v4_load) = GetProcAddress(hNDILib, "NDIlib_v4_load");
+    }
+
+    if (!NDIlib_v4_load)
+    {
+        if (hNDILib)
+        {
+            FreeLibrary(hNDILib);
+        }
+        av_log(avctx, AV_LOG_ERROR, "Please re-install the NewTek NDI Runtime to use this application.\n");
+        return 0;
+    }
+
 #else
 
     void *hNDILib = dlopen("./libndi.so.4", RTLD_LOCAL | RTLD_LAZY);
