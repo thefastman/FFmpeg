@@ -26,10 +26,14 @@
 
 #include "libndi_newtek_common.h"
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <stdio.h>
+#endif
 
 static NDIlib_v4 *p_NDILib = NULL;
 
@@ -41,7 +45,7 @@ struct NDIContext
     int reference_level;
     int clock_video, clock_audio;
 
-    NDIlib_video_frame_t *video;
+    NDIlib_video_frame_v2_t *video;
     NDIlib_audio_frame_interleaved_16s_t *audio;
     NDIlib_send_instance_t ndi_send;
     AVFrame *last_avframe;
@@ -199,7 +203,7 @@ static int ndi_setup_video(AVFormatContext *avctx, AVStream *st)
         return AVERROR(EINVAL);
     }
 
-    ctx->video = av_mallocz(sizeof(NDIlib_video_frame_t));
+    ctx->video = av_mallocz(sizeof(NDIlib_video_frame_v2_t));
     if (!ctx->video)
         return AVERROR(ENOMEM);
 

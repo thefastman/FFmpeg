@@ -48,14 +48,14 @@ struct NDIContext
     char *extra_ips;
 
     /* Runtime */
-    NDIlib_recv_create_t *recv;
+    NDIlib_recv_create_v3_t *recv;
     NDIlib_find_instance_t ndi_find;
 
     /* Streams */
     AVStream *video_st, *audio_st;
 };
 
-static int ndi_set_video_packet(AVFormatContext *avctx, NDIlib_video_frame_t *v, AVPacket *pkt)
+static int ndi_set_video_packet(AVFormatContext *avctx, NDIlib_video_frame_v2_t *v, AVPacket *pkt)
 {
     int ret;
     struct NDIContext *ctx = avctx->priv_data;
@@ -78,7 +78,7 @@ static int ndi_set_video_packet(AVFormatContext *avctx, NDIlib_video_frame_t *v,
     return 0;
 }
 
-static int ndi_set_audio_packet(AVFormatContext *avctx, NDIlib_audio_frame_t *a, AVPacket *pkt)
+static int ndi_set_audio_packet(AVFormatContext *avctx, NDIlib_audio_frame_v2_t *a, AVPacket *pkt)
 {
     int ret;
     struct NDIContext *ctx = avctx->priv_data;
@@ -156,7 +156,7 @@ static int ndi_find_sources(AVFormatContext *avctx, const char *name, NDIlib_sou
 static int ndi_read_header(AVFormatContext *avctx)
 {
     int ret;
-    NDIlib_recv_create_t recv_create_desc;
+    NDIlib_recv_create_v3_t recv_create_desc;
     const NDIlib_tally_t tally_state = {.on_program = true, .on_preview = false};
     struct NDIContext *ctx = avctx->priv_data;
 
@@ -343,8 +343,8 @@ static int ndi_read_packet(AVFormatContext *avctx, AVPacket *pkt)
 
     while (!ret)
     {
-        NDIlib_video_frame_t v;
-        NDIlib_audio_frame_t a;
+        NDIlib_video_frame_v2_t v;
+        NDIlib_audio_frame_v2_t a;
         NDIlib_metadata_frame_t m;
         NDIlib_frame_type_e t;
 
