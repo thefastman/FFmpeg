@@ -85,7 +85,7 @@ static int ndi_set_audio_packet(AVFormatContext *avctx, NDIlib_audio_frame_v2_t 
 
     NDIlib_audio_frame_interleaved_16s_t dst;
 
-    ret = av_new_packet(pkt, 2 * a->no_samples * a->no_channels);
+    ret = av_new_packet(pkt, sizeof(short) * a->no_samples * a->no_channels);
     if (ret < 0)
         return ret;
 
@@ -100,7 +100,7 @@ static int ndi_set_audio_packet(AVFormatContext *avctx, NDIlib_audio_frame_v2_t 
 
     dst.reference_level = 0;
     dst.p_data = (short *)pkt->data;
-    p_NDILib->util_audio_to_interleaved_16s_v2(a, &dst);
+    //p_NDILib->util_audio_to_interleaved_16s_v2(a, &dst);
 
     return 0;
 }
