@@ -48,7 +48,7 @@ struct NDIContext
     char *extra_ips;
 
     /* Runtime */
-    NDIlib_recv_create_v3_t *recv;
+    NDIlib_recv_instance_t *recv;
     NDIlib_find_instance_t ndi_find;
 
     /* Streams */
@@ -100,7 +100,8 @@ static int ndi_set_audio_packet(AVFormatContext *avctx, NDIlib_audio_frame_v2_t 
 
     dst.reference_level = 0;
     dst.p_data = (short *)pkt->data;
-    //p_NDILib->util_audio_to_interleaved_16s_v2(a, &dst);
+
+    p_NDILib->util_audio_to_interleaved_16s_v2(a, &dst);
 
     return 0;
 }
@@ -312,7 +313,7 @@ static int ndi_create_video_stream(AVFormatContext *avctx, NDIlib_video_frame_t 
     return 0;
 }
 
-static int ndi_create_audio_stream(AVFormatContext *avctx, NDIlib_audio_frame_v2_t *a)
+static int ndi_create_audio_stream(AVFormatContext *avctx, NDIlib_audio_frame_v3_t *a)
 {
     AVStream *st;
     struct NDIContext *ctx = avctx->priv_data;
@@ -349,7 +350,7 @@ static int ndi_read_packet(AVFormatContext *avctx, AVPacket *pkt)
         NDIlib_frame_type_e t;
 
         av_log(avctx, AV_LOG_DEBUG, "NDIlib_recv_capture...\n");
-        t = p_NDILib->recv_capture_v3(ctx->recv, &v, &a, &m, 40);
+        t = p_NDILib->recv_capture_v2(ctx->recv, &v, &a, &m, 40);
         av_log(avctx, AV_LOG_DEBUG, "NDIlib_recv_capture=%d\n", t);
 
         if (t == NDIlib_frame_type_video)

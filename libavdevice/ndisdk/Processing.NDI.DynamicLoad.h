@@ -561,6 +561,11 @@ typedef struct NDIlib_v4
 		PROCESSINGNDILIB_DEPRECATED void(*NDIlib_framesync_free_audio_v2)(NDIlib_framesync_instance_t p_instance, NDIlib_audio_frame_v3_t* p_audio_data);
 	};
 
+	union
+	{	int(*framesync_audio_queue_depth)(NDIlib_framesync_instance_t p_instance);
+		PROCESSINGNDILIB_DEPRECATED int(*NDIlib_framesync_audio_queue_depth)(NDIlib_framesync_instance_t p_instance);
+	};
+
 } NDIlib_v4;
 
 typedef struct NDIlib_v4 NDIlib_v3;

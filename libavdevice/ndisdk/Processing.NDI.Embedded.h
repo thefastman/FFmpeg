@@ -160,7 +160,7 @@ typedef struct NDIlib_compressed_packet_t
 
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
 	NDIlib_compressed_packet_t(void) : version(sizeof(NDIlib_compressed_packet_t)), fourCC(NDIlib_compressed_FourCC_type_H264), pts(0),
-	                                   dts(0), flags(flags_none), data_size(0), extra_data_size(0) { }
+	                                   dts(0), reserved(0), flags(flags_none), data_size(0), extra_data_size(0) { }
 #endif
 } NDIlib_compressed_packet_t;
 #pragma pack(pop)
@@ -216,7 +216,8 @@ bool NDIlib_send_wait_for_keyframe_request(NDIlib_send_instance_t p_instance, ui
 // to be that of a full video frame. If one were to copy each data segment into a contiguous block, it should
 // be essentially a full and valid frame. This function should be used to send only compressed data. When
 // sending a H.264 frame via this method, the NDIlib_compressed_packet_t structure is expected to be entirely
-// within the memory of the first block.  If it is not, the frame will be dropped.
+// within the memory of the first block. If it is not, the frame will be dropped. The scatter-gather list
+// will be ignored for uncompressed frames.
 PROCESSINGNDILIB_EMBEDDED_API
 void NDIlib_send_send_video_scatter(NDIlib_send_instance_t p_instance, const NDIlib_video_frame_v2_t* p_video_data, const NDIlib_frame_scatter_t* p_video_scatter);
 
@@ -228,7 +229,8 @@ void NDIlib_send_send_video_scatter(NDIlib_send_instance_t p_instance, const NDI
 // to be that of a full video frame. If one were to copy each data segment into a contiguous block, it should
 // be essentially a full and valid frame. This function should be used to send only compressed data. When
 // sending a H.264 frame via this method, the NDIlib_compressed_packet_t structure is expected to be entirely
-// within the memory of the first block.  If it is not, the frame will be dropped.
+// within the memory of the first block. If it is not, the frame will be dropped. The scatter-gather list
+// will be ignored for uncompressed frames.
 PROCESSINGNDILIB_EMBEDDED_API
 void NDIlib_send_send_video_scatter_async(NDIlib_send_instance_t p_instance, const NDIlib_video_frame_v2_t* p_video_data, const NDIlib_frame_scatter_t* p_video_scatter);
 
@@ -239,7 +241,8 @@ void NDIlib_send_send_video_scatter_async(NDIlib_send_instance_t p_instance, con
 // to be that of a full audio frame. If one were to copy each data segment into a contiguous block, it should
 // be essentially a full and valid frame. This function should be used to send only compressed data. When
 // sending an AAC frame via this method, the NDIlib_compressed_packet_t structure is expected to be entirely
-// within the memory of the first block.  If it is not, the frame will be dropped.
+// within the memory of the first block. If it is not, the frame will be dropped. The scatter-gather list
+// will be ignored for uncompressed frames.
 PROCESSINGNDILIB_EMBEDDED_API
 void NDIlib_send_send_audio_scatter(NDIlib_send_instance_t p_instance, const NDIlib_audio_frame_v3_t* p_audio_data, const NDIlib_frame_scatter_t* p_audio_scatter);
 
